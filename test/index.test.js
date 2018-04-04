@@ -1,3 +1,8 @@
-import { ast } from '../build/index';
+import {ast} from '../dist/index';
 
-console.log(ast);
+describe('base', () => {
+	test('ast', () => {
+		console.log(ast);
+		expect(1).toBeTruthy();
+	});
+});
