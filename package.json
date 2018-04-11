@@ -1,6 +1,6 @@
 {
   "name": "rax-stylesheet-util",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "rax stylesheet utils",
   "main": "dist/index.js",
   "module": "index.js",
