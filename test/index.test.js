@@ -1,4 +1,4 @@
-import { parseStyle } from '../dist/index';
+import { parseStyle, toStyleSheet } from '../dist/index';
 
 describe('base', () => {
 	test('ast', () => {
@@ -18,7 +18,8 @@ describe('base', () => {
 			}
 		`;
 
-		console.log(JSON.stringify(parseStyle(style), null, 4));
+		// console.log(JSON.stringify(parseStyle(style), null, 4));
+		console.log(`toStyleSheet: ${toStyleSheet(style)}`);
 		expect(1).toBeTruthy();
 	});
 });

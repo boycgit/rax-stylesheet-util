@@ -75,7 +75,7 @@ function parseRules({
 		if (type === MEDIA_RULE) {
 			mediaRules.push({
 				key: media,
-				data: parseRules({rules: rule.rules, transformDescendantCombinator})
+				data: parseRules({ rules: rule.rules, transformDescendantCombinator })
 			});
 		}
 	});
@@ -91,7 +91,7 @@ function parseRules({
  * 将 css 转换成 js 文件
  *
  * @export
- * @param {any} source
+ * @param {any} source - css 字符串
  * @param {boolean} [transformDescendantCombinator=false] 是否支持嵌套，具体说明可参考 http://www.aliued.com/?p=4052
  * @returns
  */
@@ -104,4 +104,20 @@ export function parseStyle(source, transformDescendantCombinator = false) {
 	}
 
 	return parseRules({ rules: stylesheet.rules });
+}
+
+/**
+ * 将 css 转换成 字符串 格式
+ *
+ * @export
+ * @param {any} source - css 字符串
+ * @param {boolean} [transformDescendantCombinator=false] 是否支持嵌套，具体说明可参考 http://www.aliued.com/?p=4052
+ * @returns
+ */
+export function toStyleSheet(source, transformDescendantCombinator = false) {
+	const parsedStyle = parseStyle(source, transformDescendantCombinator);
+
+	const { styles } = parsedStyle;
+
+	return JSON.stringify(styles || {});
 }
