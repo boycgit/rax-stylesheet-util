@@ -5,14 +5,26 @@ import {
 	getWarnMessages,
 	resetMessage
 } from './lib/promptMessage';
-import { debugMini } from './lib/debug';
+import { debugMini, debugObj } from './lib/debug';
 import { requiredParam } from './lib/roro';
 // import transformer from './lib/transformer';
 
 const RULE = 'rule';
 const FONT_FACE_RULE = 'font-face';
 const MEDIA_RULE = 'media';
-const QUOTES_REG = /['|"]/g;
+const REG_USELESS_CHAR = /[\s;]/g;
+
+/**
+ * 清理
+ * selector 有可能是下列这种情形，需要清理 `;\n\t` 这些字符：
+ *
+ *		 "selector": ";\n\t\t\t\t .header \t"
+ *
+ * @param {string} [selector='']  选择器
+ */
+function cleanSelector(selector = '') {
+	return selector.replace(REG_USELESS_CHAR, '');
+}
 
 function parseRules({
 	rules = requiredParam('rules'),
@@ -21,18 +33,21 @@ function parseRules({
 	let styles = {};
 	let fontFaceRules = [];
 	let mediaRules = [];
-	// console.log(JSON.stringify(rules, null ,4));
+	debugObj('rules: ', JSON.stringify(rules, null, 4));
 
 	rules.forEach(rule => {
 		const { media, tagName, type, selectors, position, declarations } = rule;
-
 		let style = {};
+
+		// 格式化选择器
+
+		const cleanedSelector = [].concat(selectors).map(cleanSelector);
 
 		// 普通样式规则
 		if (type === RULE) {
-			style = convert({ tagName, selectors, declarations });
+			style = convert({ tagName, selectors: cleanedSelector, declarations });
 
-			selectors.forEach(selector => {
+			cleanedSelector.forEach(selector => {
 				let sanitizedSelector = sanitizeSelector({
 					selector,
 					transformDescendantCombinator,
